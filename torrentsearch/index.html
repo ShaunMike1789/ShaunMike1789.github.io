@@ -30,26 +30,33 @@
           return vars;
       } 
 
+      function updateLinks(searchTerm) {
+        $('#linkPirateBay').text('https://thepiratebay.asia/search/' + searchTerm + '/0/99/0');
+        $('#linkPirateBay').attr('href','https://thepiratebay.asia/search/' + searchTerm + '/0/99/0');
+
+        $('#linkRarBg').text('https://rarbg.to/torrents.php?search=' + searchTerm);
+        $('#linkRarBg').attr('href','https://rarbg.to/torrents.php?search=' + searchTerm);
+        
+        $('#linkLeet').text('https://1337x.to/search/' + searchTerm + '/1/');
+        $('#linkLeet').attr('href','https://1337x.to/search/' + searchTerm + '/1/');
+
+        $('#linkTorrentGalaxy').text('https://torrentgalaxy.to/torrents.php?search=' + searchTerm + '&sort=seeders&order=desc');
+        $('#linkTorrentGalaxy').attr('href','https://torrentgalaxy.to/torrents.php?search=' + searchTerm + '&sort=seeders&order=desc');     
+      }
 
       
       $(document).ready(function () {
 
-        var searchTerms = getUrlVars()["searchTerms"];
-          console.log("Search Terms: " + searchTerms);
+        var searchTermQueryString = getUrlVars()["searchTerm"];
+        console.log("Search Term: " + searchTermQueryString);
+        if(searchTermQueryString) {
+          updateLinks(searchTermQueryString);
+
+        }
 
           $('#searchTerm').change(function () {
               let searchTerm = $('#searchTerm').val();
-              $('#linkPirateBay').text('https://thepiratebay.asia/search/' + searchTerm + '/0/99/0');
-              $('#linkPirateBay').attr('href','https://thepiratebay.asia/search/' + searchTerm + '/0/99/0');
-
-              $('#linkRarBg').text('https://rarbg.to/torrents.php?search=' + searchTerm);
-              $('#linkRarBg').attr('href','https://rarbg.to/torrents.php?search=' + searchTerm);
-              
-              $('#linkLeet').text('https://1337x.to/search/' + searchTerm + '/1/');
-              $('#linkLeet').attr('href','https://1337x.to/search/' + searchTerm + '/1/');
-
-              $('#linkTorrentGalaxy').text('https://torrentgalaxy.to/torrents.php?search=' + searchTerm + '&sort=seeders&order=desc');
-              $('#linkTorrentGalaxy').attr('href','https://torrentgalaxy.to/torrents.php?search=' + searchTerm + '&sort=seeders&order=desc');                
+              updateLinks(searchTerm)                        
           });
       });
   </script>
