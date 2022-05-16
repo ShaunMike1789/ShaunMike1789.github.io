@@ -1,63 +1,73 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="UTF-8" />
-    <title>Hello World</title>
-    <script src="../js/jquery-1.9.1.min.js"></script>
-    
-    
-  </head>
 
-  <body>
-    <h1>Search Term: <input type="text" id="searchTerm" value="" /></h1>
-    <div><h1>Pirate Bay: <a href="https://thepiratebay.asia/" id="linkPirateBay">https://thepiratebay.asia/</a></h1></div>
-    <div><h1>RarBG: <a href="https://rarbg.to/top10" id="linkRarBg">https://rarbg.to/top10</a></h1></div>
-    <div><h1>Leet Torrents: <a href="https://1337x.to/home/" id="linkLeet">https://1337x.to/home/</a></h1></div>
-    <div><h1>Torrent Galaxy: <a href="https://torrentgalaxy.to/" id="linkTorrentGalaxy">https://torrentgalaxy.to/</a></h1></div>
+<head>
+  <meta charset="UTF-8" />
+  <title>Hello World</title>
+  <script src="../js/jquery-1.9.1.min.js"></script>
+</head>
+
+<body>
+  <h1>Search Term: <input type="text" id="searchTerm" value="" /></h1>
+  <div>
+    <h1>Pirate Bay: <a href="https://thepiratebay.asia/" id="linkPirateBay">https://thepiratebay.asia/</a></h1>
+  </div>
+  <div>
+    <h1>RarBG: <a href="https://rarbg.to/top10" id="linkRarBg">https://rarbg.to/top10</a></h1>
+  </div>
+  <div>
+    <h1>Leet Torrents: <a href="https://1337x.to/home/" id="linkLeet">https://1337x.to/home/</a></h1>
+  </div>
+  <div>
+    <h1>Torrent Galaxy: <a href="https://torrentgalaxy.to/" id="linkTorrentGalaxy">https://torrentgalaxy.to/</a></h1>
+  </div>
 </body>
-  <script>   
-      // Read a page's GET URL variables and return them as an associative array.
-      function getUrlVars()
-      {
-          var vars = [], hash;
-          var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
-          for(var i = 0; i < hashes.length; i++)
-          {
-              hash = hashes[i].split('=');
-              vars.push(hash[0]);
-              vars[hash[0]] = hash[1];
-          }
-          return vars;
-      } 
+<script>
+  // Read a page's GET URL variables and return them as an associative array.
+  function getUrlVars() {
+    var vars = [],
+      hash;
+    var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+    for (var i = 0; i < hashes.length; i++) {
+      hash = hashes[i].split('=');
+      vars.push(hash[0]);
+      vars[hash[0]] = hash[1];
+    }
+    return vars;
+  }
 
-      function updateLinks(searchTerm) {
-        $('#linkPirateBay').text('https://thepiratebay.asia/search/' + searchTerm + '/0/99/0');
-        $('#linkPirateBay').attr('href','https://thepiratebay.asia/search/' + searchTerm + '/0/99/0');
+  function updateLinks(searchTerm) {
+    $('#linkPirateBay').text('https://thepiratebay.asia/search/' + searchTerm + '/0/99/0');
+    $('#linkPirateBay').attr('href', 'https://thepiratebay.asia/search/' + searchTerm + '/0/99/0');
 
-        $('#linkRarBg').text('https://rarbg.to/torrents.php?search=' + searchTerm);
-        $('#linkRarBg').attr('href','https://rarbg.to/torrents.php?search=' + searchTerm);
-        
-        $('#linkLeet').text('https://1337x.to/search/' + searchTerm + '/1/');
-        $('#linkLeet').attr('href','https://1337x.to/search/' + searchTerm + '/1/');
+    $('#linkRarBg').text('https://rarbg.to/torrents.php?search=' + searchTerm);
+    $('#linkRarBg').attr('href', 'https://rarbg.to/torrents.php?search=' + searchTerm);
 
-        $('#linkTorrentGalaxy').text('https://torrentgalaxy.to/torrents.php?search=' + searchTerm + '&sort=seeders&order=desc');
-        $('#linkTorrentGalaxy').attr('href','https://torrentgalaxy.to/torrents.php?search=' + searchTerm + '&sort=seeders&order=desc');     
-      }
+    $('#linkLeet').text('https://1337x.to/search/' + searchTerm + '/1/');
+    $('#linkLeet').attr('href', 'https://1337x.to/search/' + searchTerm + '/1/');
 
-      
-      $(document).ready(function () {
+    $('#linkTorrentGalaxy').text('https://torrentgalaxy.to/torrents.php?search=' + searchTerm +
+      '&sort=seeders&order=desc');
+    $('#linkTorrentGalaxy').attr('href', 'https://torrentgalaxy.to/torrents.php?search=' + searchTerm +
+      '&sort=seeders&order=desc');
+  }
 
-        var searchTermQueryString = getUrlVars()["searchTerm"];
-        console.log("Search Term: " + searchTermQueryString);
-        if(searchTermQueryString) {
-          updateLinks(searchTermQueryString);
 
-        }
+  $(document).ready(function () {
 
-          $('#searchTerm').change(function () {
-              let searchTerm = $('#searchTerm').val();
-              updateLinks(searchTerm)                        
-          });
-      });
-  </script>
+    var searchTermQueryString = getUrlVars()["searchTerm"];
+    console.log("Search Term: " + searchTermQueryString);
+    if (searchTermQueryString) {
+      $('#searchTerm').val(searchTermQueryString);
+      updateLinks(searchTermQueryString);
+
+    }
+
+    $('#searchTerm').change(function () {
+      let searchTerm = $('#searchTerm').val();
+      updateLinks(searchTerm)
+    });
+  });
+</script>
+
 </html>
