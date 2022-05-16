@@ -15,8 +15,28 @@
     <div><h1>Leet Torrents: <a href="https://1337x.to/home/" id="linkLeet">https://1337x.to/home/</a></h1></div>
     <div><h1>Torrent Galaxy: <a href="https://torrentgalaxy.to/" id="linkTorrentGalaxy">https://torrentgalaxy.to/</a></h1></div>
 </body>
-  <script>    
+  <script>   
+      // Read a page's GET URL variables and return them as an associative array.
+      function getUrlVars()
+      {
+          var vars = [], hash;
+          var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+          for(var i = 0; i < hashes.length; i++)
+          {
+              hash = hashes[i].split('=');
+              vars.push(hash[0]);
+              vars[hash[0]] = hash[1];
+          }
+          return vars;
+      } 
+
+
+      
       $(document).ready(function () {
+
+        var searchTerms = getUrlVars()["searchTerms"];
+          console.log("Search Terms: " + searchTerms);
+
           $('#searchTerm').change(function () {
               let searchTerm = $('#searchTerm').val();
               $('#linkPirateBay').text('https://thepiratebay.asia/search/' + searchTerm + '/0/99/0');
