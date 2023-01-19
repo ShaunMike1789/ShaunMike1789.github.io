@@ -10,7 +10,7 @@
 <body>
   <h1>Search Term: <input type="text" id="searchTerm" value="" /></h1>
   <div>
-    <h1>Pirate Bay: <a href="https://thepiratebay.asia/" id="linkPirateBay">https://thepiratebay.asia/</a></h1>
+    <h1>Pirate Bay: <a href="https://thepiratebay.org/" id="linkPirateBay">https://thepiratebay.org/</a></h1>
   </div>
   <div>
     <h1>RarBG: <a href="https://rarbg.to/top10" id="linkRarBg">https://rarbg.to/top10</a></h1>
@@ -37,8 +37,8 @@
   }
 
   function updateLinks(searchTerm) {
-    $('#linkPirateBay').text('https://thepiratebay.asia/search/' + searchTerm + '/0/99/0');
-    $('#linkPirateBay').attr('href', 'https://thepiratebay.asia/search/' + searchTerm + '/0/99/0');
+    $('#linkPirateBay').text('https://thepiratebay.org/search.php?q=' + searchTerm);
+    $('#linkPirateBay').attr('href', 'https://thepiratebay.org/search.php?q=' + searchTerm);
 
     $('#linkRarBg').text('https://rarbg.to/torrents.php?search=' + searchTerm);
     $('#linkRarBg').attr('href', 'https://rarbg.to/torrents.php?search=' + searchTerm);
