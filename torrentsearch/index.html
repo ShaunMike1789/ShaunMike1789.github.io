@@ -16,13 +16,13 @@
     <h1>Pirate Bay: <a href="https://thepiratebay.org/" id="linkPirateBay">https://thepiratebay.org/</a></h1>
   </div>
   <div>
-    <h1>RarBG: <a href="https://rarbg.to/top10" id="linkRarBg">https://rarbg.to/top10</a></h1>
-  </div>
-  <div>
     <h1>Leet Torrents: <a href="https://1337x.to/home/" id="linkLeet">https://1337x.to/home/</a></h1>
   </div>
   <div>
     <h1>Torrent Galaxy: <a href="https://torrentgalaxy.to/" id="linkTorrentGalaxy">https://torrentgalaxy.to/</a></h1>
+  </div>
+  <div>
+    <h1>BitSearch: <a href="https://bitsearch.to/" id="linkBitSearch">https://bitsearch.to/</a></h1>
   </div>
 </body>
 <script>
@@ -43,9 +43,6 @@
     $('#linkPirateBay').text('https://thepiratebay.org/search.php?q=' + searchTerm);
     $('#linkPirateBay').attr('href', 'https://thepiratebay.org/search.php?q=' + searchTerm);
 
-    $('#linkRarBg').text('https://rarbg.to/torrents.php?search=' + searchTerm);
-    $('#linkRarBg').attr('href', 'https://rarbg.to/torrents.php?search=' + searchTerm);
-
     $('#linkLeet').text('https://1337x.to/search/' + searchTerm + '/1/');
     $('#linkLeet').attr('href', 'https://1337x.to/search/' + searchTerm + '/1/');
 
@@ -53,6 +50,10 @@
       '&sort=seeders&order=desc');
     $('#linkTorrentGalaxy').attr('href', 'https://torrentgalaxy.to/torrents.php?search=' + searchTerm +
       '&sort=seeders&order=desc');
+
+    $('#linkBitSearch').text('https://bitsearch.to/search?q=' + searchTerm + '&sort=seeders');
+    $('#linkBitSearch').attr('href', 'https://bitsearch.to/search?q=' + searchTerm + '&sort=seeders');
+
   }
 
 
