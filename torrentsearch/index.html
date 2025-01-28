@@ -24,6 +24,9 @@
   <div>
     <h1>BitSearch: <a href="https://bitsearch.to/" id="linkBitSearch">https://bitsearch.to/</a></h1>
   </div>
+  <div>
+    <h1>IPTorrents: <a href="https://iptorrents.com/t" id="linkIPTorrents">https://iptorrents.com/t</a></h1>
+  </div>
 </body>
 <script>
   // Read a page's GET URL variables and return them as an associative array.
@@ -54,6 +57,8 @@
     $('#linkBitSearch').text('https://bitsearch.to/search?q=' + searchTerm + '&sort=seeders');
     $('#linkBitSearch').attr('href', 'https://bitsearch.to/search?q=' + searchTerm + '&sort=seeders');
 
+    $('#linkIPTorrents').text('https://iptorrents.com/t?q=' + searchTerm + ';o=seeders#torrents');
+    $('#linkIPTorrents').attr('href', 'https://iptorrents.com/t?q=' + searchTerm + ';o=seeders#torrents');
   }
 
 
