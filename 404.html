@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Redirecting | SMGray.com</title>
+    <style>
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: grid;
+            place-items: center;
+            padding: 24px;
+            font-family: "Segoe UI", Arial, sans-serif;
+            background: #f7f3e8;
+            color: #1f1b19;
+        }
+
+        main {
+            max-width: 680px;
+            padding: 28px;
+            background: #fffdf7;
+            border: 3px solid #231f1c;
+            border-radius: 20px;
+            box-shadow: 0 14px 32px rgba(35, 31, 28, 0.12);
+        }
+
+        h1 {
+            margin-top: 0;
+        }
+    </style>
+    <script>
+        (function () {
+            var normalizedPath = window.location.pathname.replace(/\/+$/, "");
+            var redirectMap = {
+                "/catlitternag": "/catlitternag/",
+                "/catlitternag/privacy-policy": "/catlitternag/privacy-policy/"
+            };
+            var target = redirectMap[normalizedPath];
+
+            if (target) {
+                window.location.replace(target + window.location.search + window.location.hash);
+            }
+        })();
+    </script>
+</head>
+<body>
+    <main>
+        <h1>Page not found</h1>
+        <p>If you were looking for Cat Litter Nag, try <a href="/catlitternag/">/catlitternag/</a>.</p>
+        <p>Otherwise, head back to <a href="/">SMGray.com</a>.</p>
+    </main>
+</body>
+</html>
