@@ -1,7 +1,14 @@
-import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
 import { NextResponse, type NextFetchEvent, type NextRequest } from "next/server";
 
-const isProtectedRoute = createRouteMatcher(["/tools(.*)", "/api/tools(.*)"]);
+function isProtectedRoute(request: NextRequest) {
+  const { pathname } = request.nextUrl;
+  return (
+    pathname === "/tools" ||
+    pathname.startsWith("/tools/") ||
+    pathname === "/api/tools" ||
+    pathname.startsWith("/api/tools/")
+  );
+}
 
 function authorizedEmails() {
   return new Set(
@@ -56,30 +63,34 @@ function claimEmails(sessionClaims: Record<string, unknown>) {
     .map((value) => value.toLowerCase());
 }
 
-const protectedProxy = clerkMiddleware(async (auth, request) => {
-  if (isProtectedRoute(request)) {
-    const authObject = await auth.protect();
-    const allowed = authorizedEmails();
-    const allowedUserIds = authorizedUserIds();
-
-    if (allowed.size > 0 || allowedUserIds.size > 0) {
-      const emails = claimEmails(authObject.sessionClaims);
-      const userId = authObject.userId;
-      const isAllowed =
-        (userId ? allowedUserIds.has(userId) : false) ||
-        emails.some((email) => allowed.has(email));
-
-      if (!isAllowed) {
-        return new NextResponse("Forbidden", { status: 403 });
-      }
-    }
-  }
-});
-
-export default function proxy(request: NextRequest, event: NextFetchEvent) {
-  if (process.env.NEXT_PUBLIC_DISABLE_AUTH === "1") {
+export default async function proxy(request: NextRequest, event: NextFetchEvent) {
+  if (
+    process.env.NEXT_PUBLIC_DISABLE_AUTH === "1" ||
+    !process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY
+  ) {
     return NextResponse.next();
   }
+
+  const { clerkMiddleware } = await import("@clerk/nextjs/server");
+  const protectedProxy = clerkMiddleware(async (auth, request) => {
+    if (isProtectedRoute(request)) {
+      const authObject = await auth.protect();
+      const allowed = authorizedEmails();
+      const allowedUserIds = authorizedUserIds();
+
+      if (allowed.size > 0 || allowedUserIds.size > 0) {
+        const emails = claimEmails(authObject.sessionClaims);
+        const userId = authObject.userId;
+        const isAllowed =
+          (userId ? allowedUserIds.has(userId) : false) ||
+          emails.some((email) => allowed.has(email));
+
+        if (!isAllowed) {
+          return new NextResponse("Forbidden", { status: 403 });
+        }
+      }
+    }
+  });
 
   return protectedProxy(request, event);
 }
