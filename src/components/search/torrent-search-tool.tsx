@@ -17,10 +17,10 @@ const sites = [
       `https://1337x.to/search/${encodeURIComponent(term)}/1/`,
   },
   {
-    name: "Torrent Galaxy",
-    home: "https://torrentgalaxy.to/",
+    name: "Ext.to",
+    home: "https://ext.to/browse/?with_adult=1",
     buildUrl: (term: string) =>
-      `https://torrentgalaxy.to/torrents.php?search=${encodeURIComponent(term)}&sort=seeders&order=desc`,
+      `https://ext.to/browse/?q=${encodeURIComponent(term)}&with_adult=1`,
   },
   {
     name: "BitSearch",
@@ -36,6 +36,11 @@ const sites = [
   },
 ];
 
+type SearchTarget = {
+  name: string;
+  url: string;
+};
+
 function targetUrl(site: (typeof sites)[number], term: string) {
   return term ? site.buildUrl(term) : site.home;
 }
@@ -47,6 +52,59 @@ function refocusSearch() {
       preventScroll: true,
     });
   }, 50);
+}
+
+function reserveTab() {
+  const tab = window.open("about:blank", "_blank");
+
+  if (!tab) {
+    return null;
+  }
+
+  try {
+    tab.opener = null;
+  } catch {
+    // Some browser contexts restrict opener changes.
+  }
+
+  return tab;
+}
+
+function openReservedTargets(targets: SearchTarget[]) {
+  const reserved = targets.map((target) => ({
+    tab: reserveTab(),
+    target,
+  }));
+
+  const blocked: SearchTarget[] = [];
+  const opened: SearchTarget[] = [];
+
+  for (const { tab, target } of reserved) {
+    if (!tab) {
+      blocked.push(target);
+      continue;
+    }
+
+    try {
+      tab.location.href = target.url;
+      tab.blur();
+      opened.push(target);
+    } catch {
+      try {
+        tab.close();
+      } catch {
+        // Nothing useful to do if the browser refuses to close it.
+      }
+
+      blocked.push(target);
+    }
+  }
+
+  if (opened.length > 0) {
+    refocusSearch();
+  }
+
+  return { blocked, opened };
 }
 
 export function TorrentSearchTool() {
@@ -73,23 +131,19 @@ export function TorrentSearchTool() {
     window.history.replaceState({}, "", nextUrl);
   }, [term]);
 
-  function openTarget(target: { name: string; url: string }) {
-    const tab = window.open(target.url, "_blank", "noopener,noreferrer");
+  function openTarget(target: SearchTarget) {
+    const { blocked, opened } = openReservedTargets([target]);
 
-    if (!tab) {
+    if (opened.length === 0) {
       setStatus(`Chrome blocked ${target.name}. Allow pop-ups for smgray.com.`);
       return false;
     }
 
-    try {
-      tab.opener = null;
-      tab.blur();
-    } catch {
-      // Cross-origin tabs may not allow focus control.
-    }
-
-    refocusSearch();
-    setStatus(`Opened ${target.name}.`);
+    setStatus(
+      blocked.length > 0
+        ? `Opened ${target.name}, but Chrome reported a blocked tab.`
+        : `Opened ${target.name}.`,
+    );
     return true;
   }
 
@@ -100,13 +154,12 @@ export function TorrentSearchTool() {
       name: site.name,
       url: targetUrl(site, term.trim()),
     }));
-    const opened = targets.filter(openTarget).length;
+    const { blocked, opened } = openReservedTargets(targets);
 
-    refocusSearch();
     setStatus(
-      opened === targets.length
-        ? `Opened ${opened} tabs.`
-        : `Chrome opened ${opened} of ${targets.length} tabs. Allow pop-ups for smgray.com, then try again.`,
+      blocked.length === 0
+        ? `Opened ${opened.length} tabs.`
+        : `Chrome opened ${opened.length} of ${targets.length} tabs. Allow pop-ups for smgray.com, then try again.`,
     );
   }
 
